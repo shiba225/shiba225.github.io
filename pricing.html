@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <!-- 設定文件的編碼和視口設置，並加載像素字體 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品集 - 委託價目</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* 頁面背景和字體設置 */
+        body {
+            background-color: #0D0D0D;
+            font-family: 'Press Start 2P', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #FFD700;
+        }
+
+        /* 背景圖片設置 */
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('your-background-image.jpg'); /* 更改為實際背景圖片 */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        /* 主要內容容器 */
+        .container {
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+        }
+
+        /* 價目列表設計 */
+        .price-list {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        /* 價目標題設計 */
+        .price-list h3 {
+            color: #FF1493;
+            text-decoration: underline; /* 加下劃線 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-image"></div> <!-- 背景圖片層 -->
+
+    <div class="container">
+        <h1>委託價目</h1> <!-- 頁面標題 -->
+        <p>以下為我的設計服務價格表，根據需求提供不同的選項。</p> <!-- 說明文字 -->
+        <div class="price-list">
+            <h3>插畫設計</h3> <!-- 價目分類標題 -->
+            <p>單幅：$100</p>
+            <p>系列設計：$300</p>
+            <h3>品牌設計</h3>
+            <p>標誌設計：$150</p>
+            <p>全套品牌識別：$500</p>
+        </div>
+        <a href="index.html" class="neon-button">回到首頁</a> <!-- 返回首頁的按鈕 -->
+    </div>
+
+</body>
+</html>

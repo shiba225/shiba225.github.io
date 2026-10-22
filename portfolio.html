@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品集 - 作品展示</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* 頁面背景和字體設置 */
+        body {
+            background-color: #0D0D0D;
+            font-family: 'Press Start 2P', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+           min-height: 100vh; 
+            margin: 0;
+            color: #FFD700;
+            cursor: url('4.gif'), auto;
+            overflow: auto;
+        }
+
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('150 re.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        .main-container {
+            width: 80%;
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            padding: 40px 20px;
+            border: 3px solid #FFD700;
+            border-radius: 30px;
+            background-color: rgba(13, 13, 13, 0.7);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .gallery img {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            border: 2px solid #FFD700;
+            border-radius: 8px;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.1);
+            border-color: #FF1493;
+        }
+
+        
+        /* 左右的文字 */
+        .side-text {
+            position: absolute;
+            font-size: 18px;
+            color: #FF1493; /* 桃紅色字體 */
+        }
+
+        .side-text.left {
+            left: 5%;
+            top: 50%;
+            transform: rotate(-90deg);
+        }
+
+        .side-text.right {
+            right: 5%;
+            top: 50%;
+            transform: rotate(90deg);
+        }
+
+        /* 主標題樣式 */
+        h1 {
+            font-size: 1.8em;
+            color: #FFD700;
+        }
+
+        /* 按鈕樣式 */
+        .button-group {
+            margin-top: 30px;
+        }
+
+        .button-group a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            text-decoration: none;
+            font-size: 0.9em;
+            color: #0D0D0D; /* 黑色字體 */
+            background-color: #FFD700; /* 金色背景 */
+            border: 2px solid #FF1493; /* 桃紅色邊框 */
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .button-group a:hover {
+            background-color: #FF1493; /* 背景改為桃紅 */
+            color: #FFD700; /* 字體改為金色 */
+        }
+
+        .animated-paragraph {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* 模態框樣式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .modal-content:hover {
+            cursor: zoom-out;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #FF1493;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* 分類按鈕樣式 */
+        .filter-button {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 20px;
+            color: #0D0D0D;
+            background-color: #FFD700;
+            border: 2px solid #FF1493;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            text-decoration: none;
+        }
+
+        .filter-button:hover {
+            background-color: #FF1493;
+            color: #FFD700;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+         /* 移動鼠標時的默認指針 */
+body {
+    cursor: url('4.gif'), auto;
+}
+
+/* 針對超連結（點擊時）使用不同的指針 */
+a {
+    cursor: url('1.gif'), pointer;
+}
+
+/* 針對輸入框（打字時）使用不同的指針 */
+input[type="text"], textarea {
+    cursor: url('5.gif'), text;
+}
+
+/* 針對選擇項目（例如下拉選單）使用不同的指針 */
+select {
+    cursor: url('3.gif'), pointer;
+}
+
+/* 如果有其他特定區域或交互動作也想要不同的指針，為該元素添加class並自定義 */
+.butt.loading {
+    cursor: url('2.gif'), progress;
+}
+
+/* 留言框樣式 */
+.message-container {
+            position: fixed; /* 固定在頁面底部 */
+            bottom: 15px; /* 距離底部20px */
+            left: 50%; /* 居中對齊 */
+            transform: translateX(-50%); /* 調整位置至正中 */
+            background-color: rgba(255, 255, 255, 0.2); /* 半透明白色背景 */
+            padding: 2px; /* 內邊距 */
+            border: 2px solid #FFD700; /* 金色邊框 */
+            border-radius: 2px; /* 圓角邊框 */
+            width: 25%; /* 設置寬度 */
+            max-width: 600px; /* 最大寬度 */
+            display: flex; /* 使用 Flexbox 排列 */
+            align-items: center; /* 垂直居中 */
+        }
+
+        .message-container input {
+            width: calc(100% - 60px); /* 寬度減去按鈕的寬度 */
+            padding: 10px; /* 內邊距 */
+            border: 2px solid #FFD700; /* 金色邊框 */
+            border-radius: 5px; /* 圓角 */
+            background-color: #0D0D0D; /* 背景色 */
+            color: #FFD700; /* 字色 */
+        }
+
+        .message-container button {
+            padding: 10px 20px; /* 內邊距 */
+            margin-left: 10px; /* 左邊距 */
+            background-color: #FFD700; /* 金色背景 */
+            color: #0D0D0D; /* 字色 */
+            border: 2px solid #FF1493; /* 桃紅色邊框 */
+            border-radius: 5px; /* 圓角 */
+            cursor: pointer; /* 鼠標指針樣式 */
+            transition: background-color 0.3s, color 0.3s; /* 變換效果 */
+        }
+
+        .message-container button:hover {
+            background-color: #FF1493; /* 背景改為桃紅 */
+            color: #FFD700; /* 字體改為金色 */
+        }
+
+        /* 彈幕樣式 */
+        .danmu-message {
+            position: absolute; /* 絕對定位 */
+            white-space: nowrap; /* 不換行 */
+            color: #FFD700; /* 金色字體 */
+            font-size: 20px; /* 字體大小 */
+            animation: danmu-animation linear forwards; /* 設置動畫 */
+            animation: moveBarrage linear infinite;
+            animation-duration: 10s; /* 設置動畫持續時間，數值越小移動越快 */
+        }
+
+        @keyframes moveBarrage {
+            0% {
+                transform: translateX(1500%); /* 從右邊開始 */
+            }
+            100% {
+                transform: translateX(-2000%); /* 到左邊結束 */
+            }
+        }
+
+        /* 留言框樣式 */
+        .message-container {
+            position: fixed; /* 固定在頁面底部 */
+            bottom: 15px; /* 距離底部20px */
+            left: 50%; /* 居中對齊 */
+            transform: translateX(-50%); /* 調整位置至正中 */
+            background-color: rgba(255, 255, 255, 0.2); /* 半透明白色背景 */
+            padding: 2px; /* 內邊距 */
+            border: 2px solid #FFD700; /* 金色邊框 */
+            border-radius: 2px; /* 圓角邊框 */
+            width: 25%; /* 設置寬度 */
+            max-width: 600px; /* 最大寬度 */
+            display: flex; /* 使用 Flexbox 排列 */
+            align-items: center; /* 垂直居中 */
+        }
+
+        .message-container input {
+            width: calc(100% - 60px); /* 寬度減去按鈕的寬度 */
+            padding: 10px; /* 內邊距 */
+            border: 2px solid #FFD700; /* 金色邊框 */
+            border-radius: 5px; /* 圓角 */
+            background-color: #0D0D0D; /* 背景色 */
+            color: #FFD700; /* 字色 */
+        }
+
+        .message-container button {
+            padding: 10px 20px; /* 內邊距 */
+            margin-left: 10px; /* 左邊距 */
+            background-color: #FFD700; /* 金色背景 */
+            color: #0D0D0D; /* 字色 */
+            border: 2px solid #FF1493; /* 桃紅色邊框 */
+            border-radius: 5px; /* 圓角 */
+            cursor: pointer; /* 鼠標指針樣式 */
+            transition: background-color 0.3s, color 0.3s; /* 變換效果 */
+        }
+
+        .message-container button:hover {
+            background-color: #FF1493; /* 背景改為桃紅 */
+            color: #FFD700; /* 字體改為金色 */
+        }
+
+        /* 彈幕樣式 */
+        .danmu-message {
+            position: absolute; /* 絕對定位 */
+            white-space: nowrap; /* 不換行 */
+            color: #FFD700; /* 金色字體 */
+            font-size: 20px; /* 字體大小 */
+            animation: danmu-animation linear forwards; /* 設置動畫 */
+            animation: moveBarrage linear infinite;
+            animation-duration: 2s; /* 設置動畫持續時間，數值越小移動越快 */
+        }
+
+        @keyframes moveBarrage {
+            0% {
+                transform: translateX(2000%); /* 從右邊開始 */
+            }
+            100% {
+                transform: translateX(-5000%); /* 到左邊結束 */
+            }
+        }
+
+        /* 燈箱樣式 */
+    .lightbox {
+        display: none; /* 默認隱藏 */
+        position: fixed;
+        z-index: 1000;
+        padding-top: 50px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.9); /* 背景半透明黑色 */
+    }
+
+    .lightbox-content {
+        display: block;
+        margin: auto;
+        max-width: 80%;
+        max-height: 80%;
+    }
+
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: #fff;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    
+         /* 背景星空效果 */
+         canvas {
+            position: absolute; /* 絕對定位，覆蓋整個頁面 */
+            top: 0;
+            left: 0;
+            z-index: -1; /* 確保在內容下方 */
+        }
+        
+        #music-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 5px;
+    background-color: rgba(240, 240, 240, 0.8); /* 半透明背景 */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 12px; /* 縮小字體 */
+    z-index: 1000; /* 保證顯示在頂層 */
+}
+
+#music-select {
+    padding: 2px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+#toggle-music {
+    padding: 2px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    background-color: #0000008d; /* 綠色按鈕 */
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#toggle-music.playing {
+    background-color: #ffc64c; /* 紅色按鈕 */
+}
+    </style>
+</head>
+<body>
+
+     <!-- 音樂控制區塊 -->
+     <div id="music-controls">
+        <select id="music-select" onchange="changeMusic()">
+            <option value="1.mp3">Leo's Song</option>
+            <option value="2.mp3">Musicbox Song</option>
+        </select>
+        <button id="toggle-music" onclick="toggleMusic()">播放音樂</button>
+    </div>
+
+    <audio id="audio-player" src="1.mp3" loop autoplay></audio>
+    <script src="script.js"></script>
+
+    <div class="background-image"></div>
+
+    <div class="main-container">
+        <h1 class="animated-title">PORTFOLIO</h1>
+
+        <!-- 燈箱容器 -->
+<div id="lightbox" class="lightbox">
+    <span class="close">&times;</span>
+    <img class="lightbox-content" id="lightboxImg">
+</div>
+
+        <!-- 分類按鈕 -->
+        <div class="button-group">
+            <button class="filter-button" onclick="filterImages('all')">全部</button>
+            <button class="filter-button" onclick="filterImages('lineart')">插畫作品</button>
+            <button class="filter-button" onclick="filterImages('fullcolor')">繪本創作</button>
+            <button class="filter-button" onclick="filterImages('fullcolor-bg')">畢業專題與展覽</button>
+        </div>
+
+        <!-- 圖片展示區 -->
+        <div class="gallery">
+            
+            <img src="1.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="175.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="150 re.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="2.png" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="3.png" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="4.png" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="5.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="6.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="7.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="8.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="9.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="10.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="11.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="12.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="13.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="14.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="15.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="16.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="17.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="18.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="19.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="20.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="21.jpg" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="22.png" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="23.png" alt="作品1" class="lineart" onclick="openModal(this)">
+            <img src="24.jpg" alt="作品1" class="fullcolor-bg" onclick="openModal(this)">
+            <img src="25.jpg" alt="作品1" class="fullcolor-bg" onclick="openModal(this)">
+            <img src="26.jpg" alt="作品1" class="fullcolor-bg" onclick="openModal(this)">
+            <img src="27.jpg" alt="作品1" class="fullcolor-bg" onclick="openModal(this)">
+            <img src="28.jpg" alt="作品1" class="fullcolor-bg" onclick="openModal(this)">
+            <img src="29.png" alt="作品1" class="fullcolor" onclick="openModal(this)">
+            <img src="30.png" alt="作品1" class="fullcolor" onclick="openModal(this)">
+            <img src="31.png" alt="作品1" class="fullcolor" onclick="openModal(this)">
+        </div>
+
+        <!-- 導航按鈕區域 -->
+        <div class="button-group">
+            <a href="index.html" class="neon-button">回到首頁</a>
+        </div>
+    </div>
+
+    <!-- 模態框 -->
+    <div id="myModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <script>
+        function openModal(img) {
+            const modal = document.getElementById("myModal");
+            const modalImg = document.getElementById("modalImg");
+            modal.style.display = "block";
+            modalImg.src = img.src;
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        function filterImages(category) {
+            const images = document.querySelectorAll('.gallery img');
+            images.forEach(img => {
+                if (category === 'all') {
+                    img.classList.remove('hidden');
+                } else {
+                    if (img.classList.contains(category)) {
+                        img.classList.remove('hidden');
+                    } else {
+                        img.classList.add('hidden');
+                    }
+                }
+            });
+        }
+    </script>
+
+    <!-- 彈幕顯示區域 -->
+    <div id="danmuContainer"></div>
+</div>
+
+<!-- 留言區域 -->
+<div class="message-container">
+    <input type="text" id="messageInput" placeholder="輸入留言..." /> <!-- 輸入框 -->
+    <button onclick="sendDanmu()">發送</button> <!-- 發送按鈕 -->
+</div>
+
+<div class="barrage-container">
+    <!-- 彈幕文字 -->
+    <div class="barrage" style="top: 20%;"></div>
+    <div class="barrage" style="top: 40%; animation-duration: 12s;"></div>
+    <div class="barrage" style="top: 60%; animation-duration: 8s;"></div>
+</div>
+
+
+<script>
+    function sendDanmu() {
+        const message = document.getElementById("messageInput").value;
+        if (message.trim() === "") return;
+
+        const danmuContainer = document.getElementById("danmuContainer");
+        const danmuMessage = document.createElement("span");
+        danmuMessage.classList.add("danmu-message");
+        danmuMessage.style.top = Math.random() * 80 + "vh"; // 隨機垂直位置
+        danmuMessage.style.animationDuration = (Math.random() * 20 + 35) + "s"; // 隨機動畫時間
+        danmuMessage.textContent = message;
+        danmuContainer.appendChild(danmuMessage);
+
+        // 保存留言到本地存儲
+        const messages = JSON.parse(localStorage.getItem("messages")) || [];
+        messages.push({ message, timestamp: Date.now() });
+        localStorage.setItem("messages", JSON.stringify(messages));
+
+        // 清空輸入框
+        document.getElementById("messageInput").value = "";
+
+        danmuMessage.addEventListener("animationend", () => {
+            danmuContainer.removeChild(danmuMessage);
+        });
+    }
+
+    function loadDanmu() {
+        const messages = JSON.parse(localStorage.getItem("messages")) || [];
+        const now = Date.now();
+        const twoDaysInMillis = 2 * 24 * 60 * 60 * 1000; // 兩天的毫秒數
+
+        messages.forEach(item => {
+            if (now - item.timestamp < twoDaysInMillis) {
+                const danmuContainer = document.getElementById("danmuContainer");
+                const danmuMessage = document.createElement("span");
+                danmuMessage.classList.add("danmu-message");
+                danmuMessage.style.top = Math.random() * 80 + "vh"; // 隨機垂直位置
+                danmuMessage.style.animationDuration = (Math.random() * 5 + 5) + "s"; // 隨機動畫時間
+                danmuMessage.textContent = item.message;
+                danmuContainer.appendChild(danmuMessage);
+
+                // 動畫結束後刪除彈幕
+                danmuMessage.addEventListener("animationend", () => {
+                    danmuContainer.removeChild(danmuMessage);
+                });
+            }
+        });
+    }
+
+    
+    loadDanmu(); // 在頁面加載時載入彈幕
+</script>
+
+<script>
+    // 燈箱效果 JavaScript
+    document.querySelectorAll('.gallery img').forEach(img => {
+        img.addEventListener('click', function() {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            lightbox.style.display = 'block';
+            lightboxImg.src = this.src; // 設置放大的圖片來源
+        });
+    });
+
+    // 關閉燈箱
+    document.querySelector('.close').addEventListener('click', function() {
+        document.getElementById('lightbox').style.display = 'none';
+    });
+</script>
+
+<canvas id="starCanvas"></canvas> <!-- 星空效果的畫布 -->
+
+<script>
+    const canvas = document.getElementById('starCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // 調整 canvas 尺寸
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // 星星數量
+    const starCount = 400;
+    const stars = [];
+
+    // 創建星星
+    for (let i = 0; i < starCount; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 2 + 1, // 隨機半徑
+            speed: Math.random() * 0.5 + 0.1, // 隨機速度
+            alpha: Math.random() // 隨機透明度
+        });
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空畫布
+
+        // 繪製每個星星
+        stars.forEach(star => {
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 0.5);
+            ctx.fillStyle = 'rgba(255, 255, 255, ' + star.alpha + ')';
+            ctx.shadowColor = 'rgba(255, 255, 255, 0.8'; // 增加發光效果
+            ctx.shadowBlur = 10; // 發光模糊度
+            ctx.fill();
+        });
+
+        // 更新星星位置
+        stars.forEach(star => {
+            star.y += (Math.random() * 0.2 - 0.1); // 隨機上下移動
+            if (star.y > canvas.height) {
+                star.y = 0; // 從上方重新出現
+                star.x = Math.random() * canvas.width; // 隨機x位置
+            } else if (star.y < 0) {
+                star.y = canvas.height; // 從下方重新出現
+                star.x = Math.random() * canvas.width; // 隨機x位置
+            }
+            // 隨機改變透明度以實現閃爍
+            star.alpha = Math.random();
+        });
+
+        requestAnimationFrame(draw); // 動畫循環
+    }
+
+    draw(); // 開始繪製
+
+    // 確保 canvas 大小跟隨窗口調整
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    var audioPlayer = document.getElementById("audio-player");
+        var toggleButton = document.getElementById("toggle-music");
+        var musicSelect = document.getElementById("music-select");
+
+        // 檢查 localStorage 中的音樂狀態
+        if (localStorage.getItem("music-playing") === "true") {
+            audioPlayer.play();
+            toggleButton.classList.add("playing");
+            toggleButton.innerText = "暫停音樂";
+        }
+
+        if (localStorage.getItem("music-src")) {
+            audioPlayer.src = localStorage.getItem("music-src");
+            musicSelect.value = localStorage.getItem("music-src");
+        }
+
+        function changeMusic() {
+            var selectedMusic = musicSelect.value;
+            audioPlayer.src = selectedMusic;
+            localStorage.setItem("music-src", selectedMusic);
+            audioPlayer.play();
+            toggleButton.classList.add("playing");
+            toggleButton.innerText = "暫停音樂";
+            localStorage.setItem("music-playing", "true");
+        }
+
+        function toggleMusic() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                toggleButton.classList.add("playing");
+                toggleButton.innerText = "暫停音樂";
+                localStorage.setItem("music-playing", "true");
+            } else {
+                audioPlayer.pause();
+                toggleButton.classList.remove("playing");
+                toggleButton.innerText = "播放音樂";
+                localStorage.setItem("music-playing", "false");
+            }
+        }
+
+        // 監聽所有超連結的點擊事件
+        var links = document.querySelectorAll('a');
+        links.forEach(function(link) {
+            link.addEventListener('click', function() {
+                localStorage.setItem("music-playing", "true");  // 確保音樂播放狀態持續
+            });
+        });
+</script>
+
+</body>
+</html>
+
